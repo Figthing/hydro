@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!ELEMENT mapper (sql+)>
+<!ATTLIST mapper
+	namespace CDATA #REQUIRED
+>
+
+<!ELEMENT sql (#PCDATA)*>
+<!ATTLIST sql
+	id CDATA #REQUIRED
+	type (findOne|findAll|insert|update|delete|execute) #REQUIRED
+	resultType CDATA #IMPLIED
+	route	CDATA #IMPLIED
+	startRow	CDATA #IMPLIED
+	endRow  CDATA #IMPLIED
+	loop	CDATA #IMPLIED
+	item	CDATA #IMPLIED
+>

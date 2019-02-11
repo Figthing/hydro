@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+
+	<!-- SqlSessionFactory -->
+	<bean name="sqlSessionFactory" class="org.greesoft.hydro.core.session.SqlSessionFactoryBean" autowire="byName">
+
+		<!-- 数据源 -->
+		<property name="datasource" ref="operation" />
+
+		<!-- SqlSession Class -->
+		<property name="sqlSessionClass" value="org.greesoft.hydro.test.client.utils.support.hydro.extend.SqlSession" />
+
+		<!-- 模板位置 -->
+		<property name="mapperLocations" value="classpath:mapping/*.xml" />
+	</bean>
+
+	<!-- ORM Scanner -->
+	<bean class="org.greesoft.hydro.core.scan.MapperScannerConfigurer">
+
+		<!-- 接口扫描位置 -->
+		<property name="basePackage" value="org.greesoft.hydro.test.client.dao"/>
+
+		<!-- SqlSession工厂 -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+
+</beans>

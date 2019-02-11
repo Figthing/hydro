@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper SYSTEM ":dtd/orm.dtd" >
+<mapper namespace="org.greesoft.hydro.test.client.dao.UserDao">
+
+	<!-- // ================================查询================================== // -->
+
+	<!-- 查询一条数据，参数为变量，返回对象 -->
+	<sql id="getUserInfoById" type="findOne" resultType="org.greesoft.hydro.test.client.bean.po.UserExtendPO">
+		SELECT user.id,user.account,user_extend.address,user_extend.age,user_extend.address,user_extend.name,user_extend.phone,user_extend.sex
+		FROM hydro_user user
+		LEFT JOIN hydro_user_extend user_extend ON user_extend.uid = user.id
+		WHERE user.id='${id}'
+	</sql>
+
+	<!-- 查询一条数据，参数为对象，返回对象 -->
+	<sql id="getUserInfoByParams" type="findOne" resultType="org.greesoft.hydro.test.client.bean.po.UserPO">
+		<![CDATA[
+			SELECT id,account FROM hydro_user WHERE 1=1
+
+			#if("$!params.id" != '' && "$!params.id" != '0')
+				AND id = '${params.id}'
+			#end
+		]]>
+	</sql>
+
+	<!-- 查询一条数据，返回int -->
+	<sql id="getUserCount" type="findOne" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM hydro_user
+	</sql>
+
+	<!-- 查询一条数据，返回boolean -->
+	<sql id="checkUserAccount" type="findOne" resultType="java.lang.Boolean">
+		SELECT COUNT(*) FROM hydro_user WHERE account = '${account}'
+	</sql>
+
+	<!-- 查询数据，返回列表对象 -->
+	<sql id="getAllUserAccount" type="findAll" resultType="org.greesoft.hydro.test.client.bean.po.UserPO">
+		SELECT id,account FROM hydro_user
+	</sql>
+
+	<!-- 分页查询数据，返回列表对象 -->
+	<sql id="getUserListLimitByParams" type="findAll" startRow="page" endRow="endPage" route="route" resultType="org.greesoft.hydro.test.client.bean.po.UserExtendPO">
+		<![CDATA[
+			SELECT user.id,user.account,user_extend.address,user_extend.age,user_extend.name,user_extend.phone,user_extend.sex
+			FROM hydro_user user
+			LEFT JOIN hydro_user_extend user_extend ON user_extend.uid = user.id
+			WHERE 1=1
+
+			#if("$!user.account" != '' && "$!user.account" != '0')
+				AND user.account = '${user.account}'
+			#end
+
+			#if("$!user.addr" != '' && "$!user.addr" != '0')
+				AND user_extend.address like '%${user.addr}%'
+			#end
+
+			#if("$!user.age" != '' && "$!user.age" != '0')
+				AND user_extend.age = '${user.age}'
+			#end
+
+			#if("$!user.name" != '' && "$!user.name" != '0')
+				AND user_extend.name = '${user.name}'
+			#end
+
+			#if("$!user.phone" != '' && "$!user.phone" != '0')
+				AND user_extend.phone = '${user.phone}'
+			#end
+
+			#if("$!user.sex" == 'true')
+				AND user_extend.sex = '1'
+			#elseif("$!user.sex" == 'false')
+				AND user_extend.sex = '0'
+			#end
+		]]>
+	</sql>
+
+
+	<!-- // ================================添加================================== // -->
+
+	<!-- 插入单条数据，参数为Map，返回int -->
+	<sql id="addUser" type="insert" resultType="java.lang.Boolean">
+		INSERT INTO hydro_user
+		(id, account, pwd, createDate) VALUES
+		('${user.id}', '${user.account}', '${user.pwd}', NOW())
+	</sql>
+
+	<sql id="addUserExtend" type="insert" resultType="java.lang.Boolean">
+		<![CDATA[
+			INSERT INTO hydro_user_extend
+			(uid, name, sex, age, phone, address, createDate) VALUES
+			('${user.uid}', '${user.name}',
+			#if("$!user.sex" != '' && "$!user.sex" != 'true')
+			1
+			#else
+			0
+			#end
+			, '${user.age}', '${user.phone}', '${user.addr}', NOW())
+		]]>
+	</sql>
+
+	<!-- 插入批量数据，参数为列表对象，返回booean -->
+	<sql id="addBatchUser" type="insert" resultType="java.lang.Boolean" loop="rows" item="item">
+		INSERT INTO hydro_user
+		(id, account, pwd, createDate) VALUES
+		('${item.id}', '${item.account}', '${item.pwd}', NOW())
+	</sql>
+
+	<sql id="addBatchUserExtend" type="insert" resultType="java.lang.Boolean" loop="rows" item="item">
+		<![CDATA[
+			INSERT INTO hydro_user_extend
+			(uid, name, sex, age, phone, address, createDate) VALUES
+			('${item.uid}', '${item.name}',
+			#if("$!item.sex" != '' && "$!item.sex" != 'true')
+			1
+			#else
+			0
+			#end
+			, '${item.age}', '${item.phone}', '${item.addr}', NOW())
+		]]>
+	</sql>
+
+	<!-- // ================================删除================================== // -->
+
+	<!-- 删除，执行一条SQL语句，参数为类型，返回boolean -->
+	<sql id="deleteUserById" type="delete" resultType="java.lang.Boolean">
+		DELETE t1,t2 FROM hydro_user t1,hydro_user_extend t2 WHERE t1.id=t2.uid AND t1.id='${id}'
+	</sql>
+
+	<!-- // ================================更新================================== // -->
+
+	<!-- 更新，执行一条SQL语句，参数为对象，返回int -->
+	<sql id="updateUserExtend" type="update" resultType="java.lang.Integer">
+		<![CDATA[
+			UPDATE hydro_user_extend SET updateDate=now()
+
+			#if("$!params.name" != '' && "$!params.name" != '0')
+				,name='${params.name}'
+			#end
+
+			#if("$!params.sex" != '' && "$!params.sex" != 'true')
+				,sex=0
+			#elseif("$!params.sex" != '' && "$!params.sex" != 'false')
+				,sex=1
+			#end
+
+			#if("$!params.age" != '' && "$!params.age" != '0')
+				,age=${params.age}
+			#end
+
+			#if("$!params.phone" != '' && "$!params.phone" != '0')
+				,phone='${params.phone}'
+			#end
+
+			#if("$!params.addr" != '' && "$!params.addr" != '0')
+				,address='${params.addr}'
+			#end
+
+			WHERE
+				uid='${params.id}'
+		]]>
+	</sql>
+
+</mapper>

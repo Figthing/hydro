@@ -1,0 +1,29 @@
+dubbo:
+  applicationConfig:
+    name: "hydro-test-client"
+  registryConfig:
+    protocol: "zookeeper"
+    address: "192.168.137.60:2181"
+swagger:
+  title: "Hydro 示例"
+  description: ""
+  version: "1.0"
+  basePack: "org.greesoft.hydro.test.client.controller"
+spring:
+  thymeleaf:
+    cache: false
+  freemarker:
+    cache: false
+  groovy:
+    template:
+      cache: false
+  velocity:
+    cache: false
+  devtools:
+    restart:
+      #热部署生效
+      enabled: true
+      #设置重启的目录
+      #additional-paths: src/main/java
+      #classpath目录下的WEB-INF文件夹内容修改不重启
+      exclude: WEB-INF/**

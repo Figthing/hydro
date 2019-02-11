@@ -1,0 +1,29 @@
+
+----- 用户表
+DROP TABLE IF EXISTS `hydro_user`;
+CREATE TABLE `hydro_user` (
+  `id` varchar(64) NOT NULL,
+  `account` varchar(45) NOT NULL COMMENT '账号',
+  `pwd` varchar(45) NOT NULL COMMENT '密码',
+  `createDate` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `updateDate` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `account_UNIQUE` (`account`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+----- 用户扩展信息表
+
+DROP TABLE IF EXISTS `hydro_user_extend`;
+CREATE TABLE `hydro_user_extend` (
+  `uid` varchar(64) NOT NULL,
+  `name` varchar(255) DEFAULT NULL COMMENT '姓名',
+  `sex` tinyint(1) DEFAULT NULL COMMENT '性别',
+  `age` int(2) DEFAULT NULL COMMENT '年龄',
+  `phone` varchar(32) DEFAULT NULL COMMENT '电话',
+  `address` varchar(255) DEFAULT NULL COMMENT '地址',
+  `createDate` datetime DEFAULT NULL COMMENT '创建时间',
+  `updateDate` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`uid`) USING BTREE,
+  UNIQUE KEY `uid_UNIQUE` (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户扩展表';
