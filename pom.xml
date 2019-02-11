@@ -22,7 +22,7 @@
     <zkclient.version>0.9</zkclient.version>
     <velocity.version>1.7</velocity.version>
     <oro.version>2.0.8</oro.version>
-    <fastjson.version>1.2.6</fastjson.version>
+    <fastjson.version>[1.2.31,)</fastjson.version>
     <commons-beanutils.version>1.8.3</commons-beanutils.version>
     <druid.version>1.1.6</druid.version>
     <mysql.version>5.1.38</mysql.version>
